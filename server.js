@@ -19,9 +19,8 @@ app.use(express.json())
 
 // Express Routing:
 
-// LIST - get images from picService based on filterBy, using API call and return them to the client
-app.get('/api/pic',async (req, res) => {
-  const {filterBy, sortBy} = req.query
+app.get('/api/pic', async (req, res) => {
+  const { filterBy, sortBy } = req.query
 
   try {
     const pics = await picService.query(filterBy, sortBy)
@@ -29,7 +28,7 @@ app.get('/api/pic',async (req, res) => {
   }
   catch (err) {
     console.error(err)
-    res.status(500).send({message: 'Failed to get pics'})
+    res.status(500).send({ message: 'Failed to get pics' })
   }
 })
 
