@@ -13,8 +13,22 @@ async function query(filterBy, sortBy) {
   const { category, page } = filterBy
   gPics = await _loadPics(filterBy)
 
-  const sortedPics = _sortPics(gPics, sortBy)
-  return { sortedPics }
+  const minifiedPics = gPics.map(pic => {
+    return {
+      id: pic.id,
+      url: pic.webformatURL,
+      likes: pic.likes,
+      views: pic.views,
+      downloads: pic.downloads,
+      collections: pic.collections,
+      tags: pic.tags,
+      webformatHeight: pic.webformatHeight,
+      webformatWidth: pic.webformatWidth
+    }
+  })
+
+  minifiedPics.sort((a, b) => b[sortBy] - a[sortBy])
+  return { minifiedPics }
 }
 
 async function getById(picId) {
@@ -27,8 +41,4 @@ async function _loadPics({ page, category }) {
   const pics = await axios.get(
     `https://pixabay.com/api/?key=25540812-faf2b76d586c1787d2dd02736&page=${page}&per_page=${ITEMS_PER_PAGE}&q=${category}`)
   return pics.data.hits
-}
-
-function _sortPics(pics, sortBy) {
-  return pics.sort((a, b) => b[sortBy] - a[sortBy])
 }
