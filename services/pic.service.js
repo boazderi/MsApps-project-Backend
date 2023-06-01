@@ -29,11 +29,6 @@ async function getById(picId) {
   return pic.data.hits[0]
 }
 
-function _pagingPics(pics, page) {
-  const startIdx = (page - 1) * ITEMS_PER_PAGE
-  return pics.slice(startIdx, startIdx + ITEMS_PER_PAGE)
-}
-
 function _sortPics(pics, sortBy) {
   return pics.sort((a, b) => b[sortBy] - a[sortBy])
 }
