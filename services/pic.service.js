@@ -17,16 +17,16 @@ async function query(filterBy, sortBy) {
   return { sortedPics }
 }
 
-async function _loadPics({ page, category }) {
-  const pics = await axios.get(
-    `https://pixabay.com/api/?key=25540812-faf2b76d586c1787d2dd02736&page=${page}&per_page=${ITEMS_PER_PAGE}&q=${category}`)
-  return pics.data.hits
-}
-
 async function getById(picId) {
   const pic = await axios.get(
     `https://pixabay.com/api/?key=25540812-faf2b76d586c1787d2dd02736&id=${picId}`)
   return pic.data.hits[0]
+}
+
+async function _loadPics({ page, category }) {
+  const pics = await axios.get(
+    `https://pixabay.com/api/?key=25540812-faf2b76d586c1787d2dd02736&page=${page}&per_page=${ITEMS_PER_PAGE}&q=${category}`)
+  return pics.data.hits
 }
 
 function _sortPics(pics, sortBy) {
