@@ -21,7 +21,6 @@ app.use(express.json())
 
 app.get('/api/pic', async (req, res) => {
   const { filterBy, sortBy } = req.query
-
   try {
     const pics = await picService.query(filterBy, sortBy)
     res.send(pics)
@@ -31,6 +30,21 @@ app.get('/api/pic', async (req, res) => {
     res.status(500).send({ message: 'Failed to get pics' })
   }
 })
+
+// READ
+app.get('/api/pic/:picId', async (req, res) => {
+  const {picId} = req.params
+
+  try {
+    const pic = await picService.getById(picId)
+    res.send(pic)
+  } 
+  catch (err) {
+    console.error(err)
+    res.status(500).send({ message: 'Failed to get pic by Id' })
+  }
+})
+
 
 app.listen(3030, () =>
   console.log(`Server listening on port http://127.0.0.1:3030/`)

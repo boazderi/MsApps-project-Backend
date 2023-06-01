@@ -2,30 +2,31 @@ const fs = require('fs')
 const axios = require('axios');
 
 let gPics = []
-let gCategory = null
 const ITEMS_PER_PAGE = 9
 
 module.exports = {
   query,
+  getById,
 }
 
 async function query(filterBy, sortBy) {
   const { category, page } = filterBy
-  if (gCategory !== category) {
-    gPics = await _loadPics(filterBy)
-    gCategory = category
-  }
+  gPics = await _loadPics(filterBy)
 
-  const totalPages = Math.ceil(gPics.length / ITEMS_PER_PAGE)
   const sortedPics = _sortPics(gPics, sortBy)
-  let filteredPics = _pagingPics(sortedPics, page)
-  return Promise.resolve({ totalPages, filteredPics })
+  return { sortedPics }
 }
 
-async function _loadPics({ category }) {
+async function _loadPics({ page, category }) {
   const pics = await axios.get(
-    `https://pixabay.com/api/?key=25540812-faf2b76d586c1787d2dd02736&per_page=25&q=${category}`)
+    `https://pixabay.com/api/?key=25540812-faf2b76d586c1787d2dd02736&page=${page}&per_page=${ITEMS_PER_PAGE}&q=${category}`)
   return pics.data.hits
+}
+
+async function getById(picId) {
+  const pic = await axios.get(
+    `https://pixabay.com/api/?key=25540812-faf2b76d586c1787d2dd02736&id=${picId}`)
+  return pic.data.hits[0]
 }
 
 function _pagingPics(pics, page) {
